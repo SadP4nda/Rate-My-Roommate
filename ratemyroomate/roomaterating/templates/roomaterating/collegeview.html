@@ -1,0 +1,28 @@
+{% extends 'roomaterating/base.html' %}
+{% block Colleges %} active {% endblock %}
+{% block body %}
+    <ul class = "unstyled">
+    {% for college in colleges %}
+        <li><a href="{% url 'roomaterating:colleges-roomates'  college.pk %}">{{college}}</a></li>
+    {% endfor %}
+    </ul>
+    <ul class="pagination">
+    {% if colleges.has_previous %}
+      <li><a href="?page={{ colleges.previous_page_number }}">&laquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+    {% for i in paginator.page_range %}
+      {% if colleges.number == i %}
+        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+      {% else %}
+        <li><a href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if colleges.has_next %}
+      <li><a href="?page={{ colleges.next_page_number }}">&raquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&raquo;</span></li>
+    {% endif %}
+  </ul>
+{%endblock%}

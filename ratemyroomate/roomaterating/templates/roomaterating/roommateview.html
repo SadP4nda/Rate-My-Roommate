@@ -1,0 +1,33 @@
+{% extends 'roomaterating/base.html' %}
+{% block Roommates %} active {% endblock %}
+{% block body %}
+{% if campus %}
+<a href="{{campus.website_link}}"<p>{{campus}}</p>
+{% else %}
+<p>All Roommates</p>
+{% endif %}
+{% for roommate in roommates %}
+<a href="{% url 'roomaterating:viewroommate'  roommate.pk %}"><P>{{roommate}}</P></a>
+{% endfor %}
+{% if is_paginated %}
+  <ul class="pagination">
+    {% if roommates.has_previous %}
+      <li><a href="?page={{ roommates.previous_page_number }}">&laquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+    {% for i in paginator.page_range %}
+      {% if roommates.number == i %}
+        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+      {% else %}
+        <li><a href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if roommates.has_next %}
+      <li><a href="?page={{ roommates.next_page_number }}">&raquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&raquo;</span></li>
+    {% endif %}
+  </ul>
+{% endif %}
+{% endblock %}

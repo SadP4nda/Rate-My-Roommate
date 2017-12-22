@@ -1,0 +1,155 @@
+body{
+    font-family:Verdana;
+    background:url(../images/background.jpg);
+}
+nav{
+    background-color:rgba(0,0,0,.8);
+
+  }
+.banner{
+        background-color:rgba(0,0,0,.5)
+    }
+nav .navbar-brand{
+    color:white;
+    font-family: 'Lobster';
+}
+.navbar-toggler-icon img{
+    width:100%;
+}
+.banner-wrapper{
+    background:url(../images/college.jpg);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%;
+    }
+ .litem
+ {
+    font-family: Verdana;
+ }
+#add{
+    display:flex;
+    justify-content:right;
+}
+
+.banner-info{
+    display:flex;
+    justify-content:center;
+    color:white;
+    box-sizing:50%;
+
+}
+.banner-content{
+    font-family: Verdana;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    width:50%;
+
+}
+
+
+section{
+  display: flex;
+  flex-flow: row wrap;
+  justify-content:center;
+   padding-top:5%;
+   padding-bottom:5%;
+}
+.banner-info h3{
+    text-align:center
+}
+.banner-buttons{
+    margin-left:-2%;
+    display:flex;
+    flex-wrap: wrap;
+}
+.banner-buttons a{
+    margin-left:2%;
+    margin-bottom: 5%;
+}
+#allroommates{
+    padding-left:0px;
+    padding-right:0px;
+}
+#addroommates{
+    padding-left:17px;
+    padding-right:17px;
+}
+.related-articles{
+    margin-top:5%;
+    margin-left:6%;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-around center;
+    width:80%;
+}
+.related-articles a{
+    width:40%;
+
+
+}
+.related-articles a img{
+    border:1px solid black;
+    border:25%;
+    width:100%;
+    height:80%;
+    box-shadow: 5px 5px 2.5px grey;
+}
+#related-articles{
+    font-family:'Lobster';
+    margin-top:5%;
+    text-align:center;
+    color:#696969;
+}
+.comment{
+    background-color:white;
+    box-sizing: border-box;
+    margin-top:2%;
+    margin-bottom:2%;
+    margin-left:35%;
+    width:30%;
+    border:1px solid black;
+
+}
+
+.form-background{
+
+    margin-top:5%;
+    display:flex;
+    box-sizing:border-box;
+    background-color:white;
+    width:30%;
+
+}
+
+
+.delete_button{
+    display: inline;
+}
+.container{
+    margin-left:13%;
+}
+.comment:hover{
+   background-color:#d3d3d3;
+   box-shadow: 5px 5px 2.5px grey;
+}
+button:hover{
+cursor:pointer;
+}
+@media only screen and (max-width: 667px)
+{
+    .banner{
+        background-color:rgba(0,0,0,.7)
+    }
+    nav{
+    background-color:rgba(0,0,0,.9);
+
+    }
+    .banner-buttons{
+        margin-left:28%;
+        width:40%;
+    }
+    .related-articles a{
+    width:60%;
+}
+}

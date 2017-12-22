@@ -1,0 +1,54 @@
+{% extends 'roomaterating/base.html' %}
+{% block Roommates %} active {% endblock %}
+{% block body %}
+<p>{{roomate}} </p>
+<p>College: <a href="{{roomate.college.website_link}}">{{roomate.college}}</a></p>
+<p>Overall Rating:<span style="background-color:green; color:white;">{{OverallAvg}}</span></p>
+<form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <span class="text-danger small"> {{ field.errors }}</span>
+        </div>
+        <label class="control-label col-sm-2"> {{field.label_tag}} </label>
+        <div class="col-sm-10">{{field}}</div>
+
+</div>
+{% endfor %}
+    <button type="submit" class="btn btn-success"> Submit </button>
+</form>
+{% if comments %}
+{% for comment in comments %}
+<div class="comment" >
+    <p>Username: {{comment}} </p>
+    <p>Overall Rating: {{comment.OverallRating}}</p>
+    <P>Description: {{comment.Description}}</P>
+</div>
+{% endfor %}
+    <ul class="pagination">
+    {% if comments.has_previous %}
+      <li><a href="?page={{ comments.previous_page_number }}">&laquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+    {% for i in paginator.page_range %}
+      {% if comments.number == i %}
+        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+      {% else %}
+        <li><a href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if comments.has_next %}
+      <li><a href="?page={{ comments.next_page_number }}">&raquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&raquo;</span></li>
+    {% endif %}
+  </ul>
+{% else %}
+<div class = "comment">
+    <p>No comments available</p>
+</div>
+{% endif %}
+
+{% endblock %}
