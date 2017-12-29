@@ -88,6 +88,10 @@ section{
 
 
 }
+.numbers{
+    font-family:Lobster;
+}
+
 .related-articles a img{
     border:1px solid black;
     border:25%;
@@ -112,17 +116,16 @@ section{
 
 }
 
-.form-background{
-
-    margin-top:5%;
-    display:flex;
-    box-sizing:border-box;
-    background-color:white;
-    width:30%;
-
+.form{
+display:flex;
+justify-content:center;
 }
 
 
+.pagination{
+
+    justify-content:center;
+}
 .delete_button{
     display: inline;
 }
@@ -136,8 +139,20 @@ section{
 button:hover{
 cursor:pointer;
 }
+.list-group{
+    width:40%;
+    margin-left:30%;
+}
+.list-group li{
+    padding-top:4em;
+    padding-bottom:4em;
+    }
+
 @media only screen and (max-width: 667px)
 {
+    textarea {
+    width: 75%;
+}
     .banner{
         background-color:rgba(0,0,0,.7)
     }

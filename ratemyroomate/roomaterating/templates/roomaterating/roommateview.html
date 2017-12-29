@@ -2,32 +2,39 @@
 {% block Roommates %} active {% endblock %}
 {% block body %}
 {% if campus %}
-<a href="{{campus.website_link}}"<p>{{campus}}</p>
+<a href="{{campus.website_link}}"<p>{{campus}}</p></a>
 {% else %}
 <p>All Roommates</p>
 {% endif %}
+ <ul class="list-group">
+   {% if roommates %}
 {% for roommate in roommates %}
-<a href="{% url 'roomaterating:viewroommate'  roommate.pk %}"><P>{{roommate}}</P></a>
+   <li class="list-group-item"><a href="{% url 'roomaterating:viewroommate'  roommate.pk %}">{{roommate}}</a></li>
 {% endfor %}
+ </ul>
 {% if is_paginated %}
+
   <ul class="pagination">
-    {% if roommates.has_previous %}
-      <li><a href="?page={{ roommates.previous_page_number }}">&laquo;</a></li>
+    {% if page_obj.has_previous %}
+      <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1">&laquo;</a></li>
     {% else %}
-      <li class="disabled"><span>&laquo;</span></li>
+      <li class="page-item disabled"><a class="page-link"tabindex="-1">&laquo;</a></li>
     {% endif %}
     {% for i in paginator.page_range %}
-      {% if roommates.number == i %}
-        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+      {% if page_obj.number == i %}
+        <li class="page-item active"><a class="page-link numbers" href="#">{{ i }}<span class="sr-only">(current)</span></a></li>
       {% else %}
-        <li><a href="?page={{ i }}">{{ i }}</a></li>
+        <li class="page-item"><a class="page-link numbers" href="?page={{ i }}">{{ i }}</a></li>
       {% endif %}
     {% endfor %}
-    {% if roommates.has_next %}
-      <li><a href="?page={{ roommates.next_page_number }}">&raquo;</a></li>
+    {% if page_obj.has_next %}
+      <li ><a class="page-link"tabindex="-1" href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
     {% else %}
-      <li class="disabled"><span>&raquo;</span></li>
+      <li class="page-item disabled"><a class="page-link"tabindex="-1">&raquo;</a></li>
     {% endif %}
   </ul>
-{% endif %}
+    {% endif %}
+  {% else %}
+  <li class ="list-group-item">Sorry, There are no roommates. <a href="{% url 'roomaterating:add-roommate' %}">Click here to add a new roommate</li>
+   {% endif %}
 {% endblock %}

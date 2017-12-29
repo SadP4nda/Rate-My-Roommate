@@ -1,5 +1,4 @@
 from django.views.generic import TemplateView, ListView, DetailView
-from django.views import View
 from .models import College, Roomate, Comment
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.core.urlresolvers import reverse
@@ -7,7 +6,6 @@ from .forms import CommentForm
 from django.views.generic.detail import SingleObjectMixin
 from decimal import Decimal
 # Create your views here.
-
 
 
 def get_avg(lst):
@@ -34,7 +32,7 @@ class RoomateView(ListView):
     context_object_name = "roommates"
     paginate_by = 5
     def get_queryset(self):
-        return Roomate.objects.all().order_by('first_name')
+        return Roomate.objects.all().order_by('last_name')
 
 
 class CollegeRoomatesView(ListView):
@@ -42,7 +40,7 @@ class CollegeRoomatesView(ListView):
     context_object_name = "roommates"
     paginate_by = 5
     def get_queryset(self):
-        return College.objects.get(pk=self.kwargs['pk']).roomate_set.all()
+        return College.objects.get(pk=self.kwargs['pk']).roomate_set.all().order_by('last_name')
 
     def get_context_data(self, **kwargs):
         context = super(CollegeRoomatesView, self).get_context_data(**kwargs)
@@ -61,12 +59,13 @@ class RoommateDetailView(DetailView):
         if len(roommatecomments) > 0:
             rating_lst = []
             for comment in roommatecomments:
-                rating_lst.append(comment.OverallRating)
+                rating_lst.append(comment.Overall_Rating)
             OverallAvg = round(Decimal(get_avg(rating_lst)),1)
             context['OverallAvg'] = OverallAvg
             context['comments'] = roommatecomments
         context['form'] = CommentForm()
         return context
+
 
 class AddComment(FormView, SingleObjectMixin):
     form_class = CommentForm
@@ -77,7 +76,7 @@ class AddComment(FormView, SingleObjectMixin):
         comment = Comment.objects.create(
             roomate = Roomate.objects.get(pk=self.kwargs['pk']),
             username = form.cleaned_data['username'],
-            OverallRating = form.cleaned_data['OverallRating'],
+            Overall_Rating = form.cleaned_data['Overall_Rating'],
             Description = form.cleaned_data['Description']
         )
         return super(AddComment, self).form_valid(form)
@@ -113,5 +112,3 @@ class CollegeCreateView(CreateView):
 
     def get_success_url(self):
         return reverse('roomaterating:add-roommate')
-
-

@@ -18,37 +18,20 @@
 {% endfor %}
     <button type="submit" class="btn btn-success"> Submit </button>
 </form>
+<ul class="list-group">
 {% if comments %}
 {% for comment in comments %}
-<div class="comment" >
+<li class="list-group-item">
     <p>Username: {{comment}} </p>
-    <p>Overall Rating: {{comment.OverallRating}}</p>
+    <p>Overall Rating: {{comment.Overall_Rating}}</p>
     <P>Description: {{comment.Description}}</P>
-</div>
+</li>
 {% endfor %}
-    <ul class="pagination">
-    {% if comments.has_previous %}
-      <li><a href="?page={{ comments.previous_page_number }}">&laquo;</a></li>
-    {% else %}
-      <li class="disabled"><span>&laquo;</span></li>
-    {% endif %}
-    {% for i in paginator.page_range %}
-      {% if comments.number == i %}
-        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
-      {% else %}
-        <li><a href="?page={{ i }}">{{ i }}</a></li>
-      {% endif %}
-    {% endfor %}
-    {% if comments.has_next %}
-      <li><a href="?page={{ comments.next_page_number }}">&raquo;</a></li>
-    {% else %}
-      <li class="disabled"><span>&raquo;</span></li>
-    {% endif %}
-  </ul>
-{% else %}
-<div class = "comment">
-    <p>No comments available</p>
-</div>
-{% endif %}
 
+{% else %}
+<li class="list-group-item">
+    <p>Sorry, No Comments Available</p>
+</li>
+{% endif %}
+</ul>
 {% endblock %}

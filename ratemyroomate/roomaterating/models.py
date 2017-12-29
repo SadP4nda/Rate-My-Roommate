@@ -31,7 +31,7 @@ class Comment(models.Model):
         (TWO, "2"),
         (ONE, "1"),
     )
-    OverallRating = models.DecimalField(choices=RATING_CHOICES, max_digits=2, decimal_places=1)
+    Overall_Rating = models.DecimalField(choices=RATING_CHOICES, max_digits=2, decimal_places=1)
     Description = models.TextField(max_length= 500, blank= False, null= False)
 
     def __str__(self):
