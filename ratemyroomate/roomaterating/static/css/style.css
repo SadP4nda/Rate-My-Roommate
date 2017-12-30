@@ -38,6 +38,10 @@ nav .navbar-brand{
     box-sizing:50%;
 
 }
+.roommate-details{
+    color:white;
+    background-color:rgba(0,0,0,0);
+}
 .banner-content{
     font-family: Verdana;
     display:flex;
@@ -47,7 +51,9 @@ nav .navbar-brand{
 
 }
 
-
+#comments{
+    margin-bottom:2%;
+}
 section{
   display: flex;
   flex-flow: row wrap;
@@ -72,8 +78,8 @@ section{
     padding-right:0px;
 }
 #addroommates{
-    padding-left:17px;
-    padding-right:17px;
+    padding-left:12px;
+    padding-right:12px;
 }
 .related-articles{
     margin-top:5%;
@@ -119,6 +125,7 @@ section{
 .form{
 display:flex;
 justify-content:center;
+flex-wrap:wrap;
 }
 
 
@@ -147,12 +154,32 @@ cursor:pointer;
     padding-top:4em;
     padding-bottom:4em;
     }
+.roommatetitle{
+    text-align:center;
+    font-family:Lobster;
+}
+.lobster{font-family:Lobster;}
+.jumbotron p{
+display:flex;
+justify-content:center;
+}
+#add-comment-button
+{
+    margin-left:43%;
+}
 
 @media only screen and (max-width: 667px)
 {
+    #add-comment-button
+{
+    margin-left:20%;
+}
+    #add-comment-form{
+        margin-left:20%;
+    }
     textarea {
     width: 75%;
-}
+    }
     .banner{
         background-color:rgba(0,0,0,.7)
     }

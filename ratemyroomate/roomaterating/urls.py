@@ -10,5 +10,6 @@ urlpatterns = (
     url(r'^roommate/(?P<pk>[0-9]+)/$', views.RoommateDetail.as_view(), name="viewroommate"),
     url(r'roommate/add/$', views.RoomateCreateView.as_view(), name='add-roommate'),
     url(r'college/add/$', views.CollegeCreateView.as_view(), name='add-college'),
+    url(r'roommate/search/$', views.RoommateSearch.as_view(), name='roommate_search_list_view')
 )
 

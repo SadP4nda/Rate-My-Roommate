@@ -2,14 +2,14 @@
 {% block Roommates %} active {% endblock %}
 {% block body %}
 {% if campus %}
-<a href="{{campus.website_link}}"<p>{{campus}}</p></a>
+<a href="{{campus.website_link}}"><h1 class="roommatetitle">{{campus}}</h1></a>
 {% else %}
-<p>All Roommates</p>
+<h1 class = "roommatetitle">All Roommates</h1>
 {% endif %}
  <ul class="list-group">
    {% if roommates %}
 {% for roommate in roommates %}
-   <li class="list-group-item"><a href="{% url 'roomaterating:viewroommate'  roommate.pk %}">{{roommate}}</a></li>
+   <li class="list-group-item"><a href="{% url 'roomaterating:viewroommate'  roommate.pk %}">{{roommate}}--{{roommate.college}}</a></li>
 {% endfor %}
  </ul>
 {% if is_paginated %}

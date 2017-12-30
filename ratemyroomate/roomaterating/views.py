@@ -5,16 +5,15 @@ from django.core.urlresolvers import reverse
 from .forms import CommentForm
 from django.views.generic.detail import SingleObjectMixin
 from decimal import Decimal
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import Q
+
 # Create your views here.
-
-
 def get_avg(lst):
     total = 0
     for item in lst:
         total += item
     return total/len(lst)
-
-
 class IndexView(TemplateView):
     template_name = "roomaterating/index.html"
 
@@ -63,6 +62,7 @@ class RoommateDetailView(DetailView):
             OverallAvg = round(Decimal(get_avg(rating_lst)),1)
             context['OverallAvg'] = OverallAvg
             context['comments'] = roommatecomments
+
         context['form'] = CommentForm()
         return context
 
@@ -112,3 +112,15 @@ class CollegeCreateView(CreateView):
 
     def get_success_url(self):
         return reverse('roomaterating:add-roommate')
+
+class RoommateSearch(ListView):
+    template_name = "roomaterating/roommateviewsearch.html"
+    context_object_name = 'roommates'
+    paginate_by = 5
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        if query:
+            result = Roomate.objects.all().filter(Q(first_name__icontains=query) | Q(last_name__icontains=query)).order_by('first_name', 'last_name')
+        else:
+            return []
+        return result

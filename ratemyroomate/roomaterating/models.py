@@ -2,9 +2,11 @@ from django.db import models
 
 # Create your models here.
 class College(models.Model):
-    campus = models.CharField(max_length=50, unique=True)
+    campus = models.CharField(max_length=50,)
     website_link = models.CharField(max_length=200)
 
+    class Meta:
+        unique_together = ('campus', 'website_link',)
     def __str__(self):
         return self.campus
 
@@ -13,6 +15,8 @@ class Roomate(models.Model):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
 
+    class Meta:
+        unique_together = ('last_name', 'first_name','college')
     def __str__(self):
         return self.first_name + " " + self.last_name
 
