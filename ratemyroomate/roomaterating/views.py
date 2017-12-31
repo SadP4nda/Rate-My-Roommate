@@ -1,13 +1,12 @@
 from django.views.generic import TemplateView, ListView, DetailView
-from .models import College, Roomate, Comment
+from .models import College, Roomate, Comment, CollegeSuggestion
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.core.urlresolvers import reverse
 from .forms import CommentForm
 from django.views.generic.detail import SingleObjectMixin
 from decimal import Decimal
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
-
+from itertools import chain
 # Create your views here.
 def get_avg(lst):
     total = 0
@@ -106,8 +105,8 @@ class RoomateCreateView(CreateView):
 
 
 class CollegeCreateView(CreateView):
-    model = College
-    fields = ['campus','website_link']
+    model = CollegeSuggestion
+    fields = ['college']
     template_name = 'roomaterating/AddCollege.html'
 
     def get_success_url(self):
@@ -120,7 +119,21 @@ class RoommateSearch(ListView):
     def get_queryset(self):
         query = self.request.GET.get('q')
         if query:
-            result = Roomate.objects.all().filter(Q(first_name__icontains=query) | Q(last_name__icontains=query)).order_by('first_name', 'last_name')
+            splitted_query = query.split(' ')
+            if len(splitted_query) > 1:
+                first_name_matches = Roomate.objects.all().filter(Q(first_name__icontains=splitted_query[0]) |
+                                                                  Q(last_name__icontains=splitted_query[0])).\
+                    order_by('first_name', 'last_name')
+                last_name_matches = Roomate.objects.all().filter(Q(first_name__icontains=splitted_query[len(splitted_query)-1])
+                                                                 | Q(last_name__icontains=splitted_query[len(splitted_query)-1]))\
+                    .order_by('first_name', 'last_name')
+                name_set = set(chain(first_name_matches, last_name_matches))
+                result = []
+                for name in name_set:
+                    result.append(name)
+            else:
+                result = Roomate.objects.all().filter(Q(first_name__icontains=query) | Q(last_name__icontains=query)).\
+                    order_by('first_name', 'last_name')
         else:
             return []
         return result

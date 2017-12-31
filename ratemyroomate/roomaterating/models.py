@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.core.validators import RegexValidator
 # Create your models here.
 class College(models.Model):
     campus = models.CharField(max_length=50,)
@@ -12,13 +12,18 @@ class College(models.Model):
 
 class Roomate(models.Model):
     college = models.ForeignKey(College, on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
+    first_name = models.CharField(max_length=30,validators=[RegexValidator(regex='^[A-Z]*$',message="First Name must be All Caps",code="invalid_first_name")])
+    last_name = models.CharField(max_length=30, validators=[RegexValidator(regex='^[A-Z]*$',message="Last Name must be All Caps",code="invalid_last_name")])
 
     class Meta:
         unique_together = ('last_name', 'first_name','college')
-    def __str__(self):
+
+    @property
+    def full_name(self):
         return self.first_name + " " + self.last_name
+    def __str__(self):
+        return self.full_name
+
 
 class Comment(models.Model):
     roomate = models.ForeignKey(Roomate)
@@ -40,3 +45,9 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.username
+class CollegeSuggestion(models.Model):
+
+
+    college = models.CharField(max_length = 50)
+    def __str__(self):
+        return self.college
