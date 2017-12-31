@@ -12,8 +12,12 @@ class College(models.Model):
 
 class Roomate(models.Model):
     college = models.ForeignKey(College, on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=30,validators=[RegexValidator(regex='^[A-Z]*$',message="First Name must be All Caps",code="invalid_first_name")])
-    last_name = models.CharField(max_length=30, validators=[RegexValidator(regex='^[A-Z]*$',message="Last Name must be All Caps",code="invalid_last_name")])
+    first_name = models.CharField(max_length=30,validators=[RegexValidator(regex='^[A-Z]*$',
+                                                                           message="First Name must be All Caps",
+                                                                           code="invalid_first_name")])
+    last_name = models.CharField(max_length=30, validators=[RegexValidator(regex='^[A-Z]*$',
+                                                                           message="Last Name must be All Caps",
+                                                                           code="invalid_last_name")])
 
     class Meta:
         unique_together = ('last_name', 'first_name','college')
@@ -45,9 +49,12 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.username
+
+
 class CollegeSuggestion(models.Model):
-
-
-    college = models.CharField(max_length = 50)
+    college = models.CharField(max_length = 50, validators=[RegexValidator(regex='^[A-Za-z\s]*$',
+                                                                           message="Please enter a college name "
+                                                                                   "(No numbers or special characters)",
+                                                                           code="invalid_college")])
     def __str__(self):
         return self.college

@@ -8,11 +8,14 @@ from decimal import Decimal
 from django.db.models import Q
 from itertools import chain
 # Create your views here.
+
 def get_avg(lst):
     total = 0
     for item in lst:
         total += item
     return total/len(lst)
+
+
 class IndexView(TemplateView):
     template_name = "roomaterating/index.html"
 
@@ -110,7 +113,7 @@ class CollegeCreateView(CreateView):
     template_name = 'roomaterating/AddCollege.html'
 
     def get_success_url(self):
-        return reverse('roomaterating:add-roommate')
+        return reverse('roomaterating:index')
 
 class RoommateSearch(ListView):
     template_name = "roomaterating/roommateviewsearch.html"
@@ -135,5 +138,5 @@ class RoommateSearch(ListView):
                 result = Roomate.objects.all().filter(Q(first_name__icontains=query) | Q(last_name__icontains=query)).\
                     order_by('first_name', 'last_name')
         else:
-            return []
+            return[]
         return result
