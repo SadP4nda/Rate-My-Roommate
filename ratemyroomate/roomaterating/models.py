@@ -22,6 +22,7 @@ class Roomate(models.Model):
     class Meta:
         unique_together = ('last_name', 'first_name','college')
 
+
     @property
     def full_name(self):
         return self.first_name + " " + self.last_name
