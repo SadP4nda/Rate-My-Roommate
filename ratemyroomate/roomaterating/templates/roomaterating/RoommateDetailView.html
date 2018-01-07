@@ -1,0 +1,59 @@
+{% extends 'roomaterating/base.html' %}
+{% block Roommates %} active {% endblock %}
+{% block bannerbody %}
+<div class="jumbotron roommate-details" >
+  <h1 class="display-4 lobster">{{roomate}} </h1>
+    <hr class="my-4">
+<p>College: <a class= "lobster" href="{{roomate.college.website_link}}">{{roomate.college}}</a></p>
+<p>Overall Rating:<span class="lobster jumbotron-" style="color:{% if OverallAvg > 3.7 %}green {% elif OverallAvg > 2.0 %} yellow {% elif OverallAvg <= 2.0 %} red {% else %} white {% endif %};">{{OverallAvg}}</span></p>
+</div>
+{% endblock %}
+{% block body %}
+<div class="form" id = "add-comment-form">
+<form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <span class="text-danger small"> {{ field.errors }}</span>
+        </div>
+        <label class="control-label col-sm-2"> {{field.label_tag}} </label>
+        <div class="col-sm-10">{{field}}</div>
+
+</div>
+{% endfor %}
+        {% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in form.non_field_errors %}
+        <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
+    <button type="submit" class="btn btn-success" id="add-comment-button"> Submit </button>
+</form>
+</div>
+<h1 class="lobster" id="allcomments"> All Comments</h1>
+<ul class="list-group" id = "comments">
+{% if comments %}
+{% for comment in comments %}
+<li class="list-group-item" >
+    <h3><span class="numbers">Username:</span> {{comment}} </h3>
+    <h3><span class="numbers">Overall Rating: <span style=" color:{% if OverallAvg > 3.7 %}green {% elif OverallAvg > 2.0 %} yellow {% elif OverallAvg <= 2.0 %} red {% else %} white {% endif %};">{{comment.Overall_Rating}}</span></span></h3>
+    <h3><span class="numbers">Description:</span> {{comment.Description}}</h3>
+</li>
+{% endfor %}
+
+{% else %}
+<li class="list-group-item">
+    <p>Sorry, No Comments Available</p>
+</li>
+{% endif %}
+</ul>
+{% endblock %}
