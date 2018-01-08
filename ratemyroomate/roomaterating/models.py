@@ -47,7 +47,8 @@ class Comment(models.Model):
     )
     Overall_Rating = models.DecimalField(choices=RATING_CHOICES, max_digits=2, decimal_places=1)
     Description = models.TextField(max_length= 500, blank= False, null= False)
-
+    class Meta:
+        unique_together = ('username', 'roomate')
     def __str__(self):
         return self.username
 

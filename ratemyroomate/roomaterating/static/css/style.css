@@ -1,5 +1,18 @@
+@font-face{
+    font-family:Raleway;
+    src: url(../fonts/Raleway-Regular.ttf);
+}
+@font-face{
+    font-family:Raleway-Black;
+    src: url(../fonts/Raleway-Black.ttf);
+
+}
+@font-face{
+    font-family:Raleway-Bold;
+    src: url(../fonts/Raleway-Bold.ttf);
+}
 body{
-    font-family:Verdana;
+    font-family:Raleway;
     background:url(../images/background.jpg);
 }
 nav{
@@ -24,7 +37,7 @@ nav .navbar-brand{
     }
  .litem
  {
-    font-family: Verdana;
+    font-family:Raleway-Black;
  }
 #add{
     display:flex;
@@ -43,7 +56,7 @@ nav .navbar-brand{
     background-color:rgba(0,0,0,0);
 }
 .banner-content{
-    font-family: Verdana;
+    font-family: Raleway;
     display:flex;
     flex-wrap:wrap;
     justify-content:center;
@@ -155,6 +168,9 @@ cursor:pointer;
     padding-top:4em;
     padding-bottom:4em;
     }
+.list-group-item{
+    font-family:Raleway-Bold;
+}
 .roommatetitle{
     margin-top:1.5%;
     text-align:center;

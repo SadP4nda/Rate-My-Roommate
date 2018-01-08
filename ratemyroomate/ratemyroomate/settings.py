@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'snowpenguin.django.recaptcha2',
 ]
 
 MIDDLEWARE = [
@@ -117,5 +118,10 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
+
+RECAPTCHA_PRIVATE_KEY = "6Lcrrz8UAAAAAFlFMvsfASBBIzQXJu2NLcbHizVK"
+
+RECAPTCHA_PUBLIC_KEY = "6Lcrrz8UAAAAAN0tPkJIqF66VTnYBgX6-v4MMp8C"
+
 
 STATIC_URL = '/static/'

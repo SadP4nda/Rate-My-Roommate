@@ -2,11 +2,13 @@ from django.views.generic import TemplateView, ListView, DetailView
 from .models import College, Roomate, Comment, CollegeSuggestion
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.core.urlresolvers import reverse
-from .forms import CommentForm
+from .forms import CommentForm, RoommateCreateForm, CollegeSuggestionCreateForm
 from django.views.generic.detail import SingleObjectMixin
 from decimal import Decimal
 from django.db.models import Q
 from itertools import chain
+from django.http import HttpResponse
+from django.shortcuts import render_to_response
 # Create your views here.
 
 def get_avg(lst):
@@ -75,12 +77,19 @@ class AddComment(FormView, SingleObjectMixin):
     model = Roomate
 
     def form_valid(self, form):
-        comment = Comment.objects.create(
-            roomate = Roomate.objects.get(pk=self.kwargs['pk']),
-            username = form.cleaned_data['username'],
-            Overall_Rating = form.cleaned_data['Overall_Rating'],
-            Description = form.cleaned_data['Description']
-        )
+        try:
+            Comment.objects.create(
+                roomate = Roomate.objects.get(pk=self.kwargs['pk']),
+                username = form.cleaned_data['username'],
+                Overall_Rating = form.cleaned_data['Overall_Rating'],
+                Description = form.cleaned_data['Description']
+                )
+        except:
+            return super(AddComment, self).form_valid(form)
+        return super(AddComment, self).form_valid(form)
+
+    def form_invalid(self, form):
+
         return super(AddComment, self).form_valid(form)
 
     def get_success_url(self):
@@ -94,22 +103,22 @@ class RoommateDetail(TemplateView):
         return view(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
+
         view = AddComment.as_view()
         return view(request, *args, **kwargs)
 
 
 class RoomateCreateView(CreateView):
     model = Roomate
-    fields = ['college', 'first_name', 'last_name']
     template_name = 'roomaterating/AddRoommate.html'
-
+    form_class = RoommateCreateForm
     def get_success_url(self):
         return reverse('roomaterating:index')
 
 
 class CollegeCreateView(CreateView):
     model = CollegeSuggestion
-    fields = ['college']
+    form_class = CollegeSuggestionCreateForm
     template_name = 'roomaterating/AddCollege.html'
 
     def get_success_url(self):

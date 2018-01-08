@@ -1,4 +1,6 @@
 {% extends 'roomaterating/base.html' %}
+{% load recaptcha2 %}
+{% block head %}{% recaptcha_init %}{% endblock %}
 {% block Roommates %} active {% endblock %}
 {% block bannerbody %}
 <div class="jumbotron roommate-details" >
@@ -38,6 +40,8 @@
 {% endif %}
     <button type="submit" class="btn btn-success" id="add-comment-button"> Submit </button>
 </form>
+    {% recaptcha_explicit_init %}
+
 </div>
 <h1 class="lobster" id="allcomments"> All Comments</h1>
 <ul class="list-group" id = "comments">
