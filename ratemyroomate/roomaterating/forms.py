@@ -10,6 +10,7 @@ class CommentForm(forms.ModelForm):
         model = Comment
         fields = ('username', 'Overall_Rating', 'Description')
 
+
 class RoommateCreateForm(forms.ModelForm):
     captcha = ReCaptchaField(widget=ReCaptchaWidget())
     class Meta:

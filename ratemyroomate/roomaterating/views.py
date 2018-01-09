@@ -7,8 +7,9 @@ from django.views.generic.detail import SingleObjectMixin
 from decimal import Decimal
 from django.db.models import Q
 from itertools import chain
-from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
+from django.db import IntegrityError
 # Create your views here.
 
 def get_avg(lst):
@@ -77,6 +78,7 @@ class AddComment(FormView, SingleObjectMixin):
     model = Roomate
 
     def form_valid(self, form):
+
         try:
             Comment.objects.create(
                 roomate = Roomate.objects.get(pk=self.kwargs['pk']),
@@ -84,13 +86,14 @@ class AddComment(FormView, SingleObjectMixin):
                 Overall_Rating = form.cleaned_data['Overall_Rating'],
                 Description = form.cleaned_data['Description']
                 )
-        except:
-            return super(AddComment, self).form_valid(form)
+        except IntegrityError:
+            return HttpResponseRedirect(
+                reverse('roomaterating:viewroommate', kwargs={'pk': self.kwargs['pk']}))
         return super(AddComment, self).form_valid(form)
 
     def form_invalid(self, form):
 
-        return super(AddComment, self).form_valid(form)
+        return HttpResponseRedirect(reverse('roomaterating:viewroommate', kwargs={'pk': self.kwargs['pk']}))
 
     def get_success_url(self):
         return reverse('roomaterating:viewroommate', kwargs={'pk': self.kwargs['pk']})
@@ -103,7 +106,6 @@ class RoommateDetail(TemplateView):
         return view(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-
         view = AddComment.as_view()
         return view(request, *args, **kwargs)
 
