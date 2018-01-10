@@ -63,9 +63,16 @@ nav .navbar-brand{
     width:50%;
 
 }
+#add-comment-link:link{
+    text-decoration:  none;
 
+}
 #comments{
     margin-bottom:2%;
+}
+#add-comment{
+    margin-bottom:2%;
+    text-align:center;
 }
 section{
   display: flex;
@@ -139,6 +146,7 @@ section{
 display:flex;
 justify-content:center;
 flex-wrap:wrap;
+margin-bottom:2%;
 }
 
 
@@ -186,6 +194,13 @@ cursor:pointer;
 display:flex;
 justify-content:center;
 }
+.jumbotron a{
+    display:flex;
+    justify-content:center;
+}
+.add-comment{
+
+}
 #add-comment-button
 {
     margin-left:43%;
@@ -196,6 +211,14 @@ justify-content:center;
 text-align:center; margin-top:2.5%;}
 @media only screen and (max-width: 667px)
 {
+    .g-recaptcha{
+        margin-left:-50px;
+    }
+    .list-group{
+        margin-left:15%;
+        width:80%;
+
+    }
     #add-comment-button
 {
     margin-left:25%

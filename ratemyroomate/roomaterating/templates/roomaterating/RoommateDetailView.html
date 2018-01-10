@@ -4,13 +4,33 @@
 {% block Roommates %} active {% endblock %}
 {% block bannerbody %}
 <div class="jumbotron roommate-details" >
-  <h1 class="display-4 lobster">{{roomate}} </h1>
+  <h1 class="display-4 lobster">{{roomate|title}} </h1>
     <hr class="my-4">
-<p>College: <a class= "lobster" href="{{roomate.college.website_link}}">{{roomate.college}}</a></p>
-<p>Overall Rating:<span class="lobster jumbotron-" style="color:{% if OverallAvg > 3.7 %}green {% elif OverallAvg > 2.0 %} yellow {% elif OverallAvg <= 2.0 %} red {% else %} white {% endif %};">{{OverallAvg}}</span></p>
+<p>College: &nbsp; <a class= "lobster" href="{{roomate.college.website_link}}">{{roomate.college}}</a></p>
+<p>Overall Rating: &nbsp;<span class="lobster jumbotron-" style="color:{% if OverallAvg > 3.7 %}green {% elif OverallAvg > 2.0 %} yellow {% elif OverallAvg <= 2.0 %} red {% else %} white {% endif %};">{{OverallAvg}}</span></p>
+    <a class="lobster" href="#add-comment" id="add-comment-link"><button type="button" class="btn btn-secondary btn-outline-light btn-lg">Add A Comment</button></a>
 </div>
 {% endblock %}
 {% block body %}
+
+
+<h1 class="lobster" id="allcomments"> All Comments</h1>
+<ul class="list-group" id = "comments">
+{% if comments %}
+{% for comment in comments %}
+<li class="list-group-item" >
+    <h3><span class="numbers">Overall Rating: <span style=" color:{% if OverallAvg > 3.7 %}green {% elif OverallAvg > 2.0 %} yellow {% elif OverallAvg <= 2.0 %} red {% else %} white {% endif %};">{{comment.Overall_Rating}}</span></span></h3>
+    <h3><span class="numbers">Description:</span> {{comment.Description}}</h3>
+</li>
+{% endfor %}
+
+{% else %}
+<li class="list-group-item">
+    <p>Sorry, No Comments Available</p>
+</li>
+{% endif %}
+</ul>
+<h2 class = 'lobster' id = "add-comment">Add a Comment</h2>
 <div class="form" id = "add-comment-form">
 <form class="form-horizontal" action="{% url 'roomaterating:viewroommate' roomate.pk %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
@@ -39,23 +59,5 @@
     <button type="submit" class="btn btn-success" id="add-comment-button"> Submit </button>
 </form>
     {% recaptcha_explicit_init %}
-
 </div>
-<h1 class="lobster" id="allcomments"> All Comments</h1>
-<ul class="list-group" id = "comments">
-{% if comments %}
-{% for comment in comments %}
-<li class="list-group-item" >
-    <h3><span class="numbers">Username:</span> {{comment}} </h3>
-    <h3><span class="numbers">Overall Rating: <span style=" color:{% if OverallAvg > 3.7 %}green {% elif OverallAvg > 2.0 %} yellow {% elif OverallAvg <= 2.0 %} red {% else %} white {% endif %};">{{comment.Overall_Rating}}</span></span></h3>
-    <h3><span class="numbers">Description:</span> {{comment.Description}}</h3>
-</li>
-{% endfor %}
-
-{% else %}
-<li class="list-group-item">
-    <p>Sorry, No Comments Available</p>
-</li>
-{% endif %}
-</ul>
 {% endblock %}

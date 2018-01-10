@@ -8,14 +8,14 @@ class CommentForm(forms.ModelForm):
     captcha = ReCaptchaField(widget=ReCaptchaWidget())
     class Meta:
         model = Comment
-        fields = ('username', 'Overall_Rating', 'Description')
+        fields = ('Overall_Rating', 'Description')
 
 
 class RoommateCreateForm(forms.ModelForm):
     captcha = ReCaptchaField(widget=ReCaptchaWidget())
     class Meta:
         model = Roomate
-        fields = ['college', 'first_name', 'last_name']
+        fields = ['college', 'first_name', 'last_name', 'student_id']
 
 class CollegeSuggestionCreateForm(forms.ModelForm):
     captcha = ReCaptchaField(widget=ReCaptchaWidget())

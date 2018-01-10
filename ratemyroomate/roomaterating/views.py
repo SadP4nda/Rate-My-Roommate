@@ -1,6 +1,6 @@
 from django.views.generic import TemplateView, ListView, DetailView
 from .models import College, Roomate, Comment, CollegeSuggestion
-from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
+from django.views.generic.edit import CreateView, FormView
 from django.core.urlresolvers import reverse
 from .forms import CommentForm, RoommateCreateForm, CollegeSuggestionCreateForm
 from django.views.generic.detail import SingleObjectMixin
@@ -8,8 +8,8 @@ from decimal import Decimal
 from django.db.models import Q
 from itertools import chain
 from django.http import HttpResponseRedirect
-from django.shortcuts import render_to_response
 from django.db import IntegrityError
+
 # Create your views here.
 
 def get_avg(lst):
@@ -56,7 +56,9 @@ class RoommateDetailView(DetailView):
     model = Roomate
     template_name = "roomaterating/RoommateDetailView.html"
     paginate_by = 5
+
     def get_context_data(self, **kwargs):
+
         context = super(RoommateDetailView,self).get_context_data(**kwargs)
         roommatecomments = self.get_object().comment_set.all()
         context['OverallAvg'] = "No rating Available"
@@ -67,35 +69,40 @@ class RoommateDetailView(DetailView):
             OverallAvg = round(Decimal(get_avg(rating_lst)),1)
             context['OverallAvg'] = OverallAvg
             context['comments'] = roommatecomments
+        if 'form' not in context:
+            context['form'] = CommentForm()
 
-        context['form'] = CommentForm()
         return context
+
 
 
 class AddComment(FormView, SingleObjectMixin):
     form_class = CommentForm
     template_name = "roomaterating/RoommateDetailView.html"
     model = Roomate
+    def get_context_data(self, **kwargs):
 
+        context = super(AddComment,self).get_context_data(**kwargs)
+
+        return context
     def form_valid(self, form):
 
         try:
             Comment.objects.create(
                 roomate = Roomate.objects.get(pk=self.kwargs['pk']),
-                username = form.cleaned_data['username'],
                 Overall_Rating = form.cleaned_data['Overall_Rating'],
                 Description = form.cleaned_data['Description']
                 )
         except IntegrityError:
-            return HttpResponseRedirect(
-                reverse('roomaterating:viewroommate', kwargs={'pk': self.kwargs['pk']}))
+            return HttpResponseRedirect(reverse('roomaterating:viewroommate',kwargs={'pk': self.kwargs['pk']}))
+
         return super(AddComment, self).form_valid(form)
 
     def form_invalid(self, form):
 
         return HttpResponseRedirect(reverse('roomaterating:viewroommate', kwargs={'pk': self.kwargs['pk']}))
-
     def get_success_url(self):
+
         return reverse('roomaterating:viewroommate', kwargs={'pk': self.kwargs['pk']})
 
 
@@ -110,10 +117,25 @@ class RoommateDetail(TemplateView):
         return view(request, *args, **kwargs)
 
 
-class RoomateCreateView(CreateView):
-    model = Roomate
+class RoomateCreateView(FormView):
+
     template_name = 'roomaterating/AddRoommate.html'
     form_class = RoommateCreateForm
+    def form_valid(self, form):
+        try:
+            Roomate.objects.create(
+                college= form.cleaned_data['college'],
+                first_name = form.cleaned_data['first_name'].upper(),
+                last_name = form.cleaned_data['last_name'].upper(),
+                student_id = form.cleaned_data['student_id'],   
+                )
+        except IntegrityError:
+            form.add_error(None, "This Roommate already exists")
+            return super(RoomateCreateView,self).form_invalid(form)
+        return super(RoomateCreateView,self).form_valid(form)
+    def form_invalid(self,request, *args, **kwargs):
+
+        return self.get(self, request, *args, **kwargs)
     def get_success_url(self):
         return reverse('roomaterating:index')
 

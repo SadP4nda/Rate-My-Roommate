@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import RegexValidator
+from datetime import datetime
 # Create your models here.
 class College(models.Model):
     campus = models.CharField(max_length=50,)
@@ -12,15 +13,22 @@ class College(models.Model):
 
 class Roomate(models.Model):
     college = models.ForeignKey(College, on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=30,validators=[RegexValidator(regex='^[A-Z]*$',
-                                                                           message="First Name must be All Caps",
-                                                                           code="invalid_first_name")])
-    last_name = models.CharField(max_length=30, validators=[RegexValidator(regex='^[A-Z]*$',
-                                                                           message="Last Name must be All Caps",
-                                                                           code="invalid_last_name")])
+    first_name = models.CharField(max_length=30, validators=[RegexValidator(regex='^[A-Za-z\s]*$',
+                                                                           message="Please enter a first name "
+                                                                                   "(No numbers or special characters)",
+                                                                           code="invalid_college")])
+    last_name = models.CharField(max_length=30, validators=[RegexValidator(regex='^[A-Za-z]*$',
+                                                                           message="Please enter a last name "
+                                                                                   "(No numbers, special characters or spaces)",
+                                                                           code="invalid_college")])
+    student_id = models.CharField(blank= False, max_length = 30, validators=[RegexValidator(regex='^[A-Za-z0-9]*$',
+                                                                           message="Please enter a Student ID "
+                                                                                   "(No special characters or spaces)",
+                                                                           code="invalid_college")])
 
     class Meta:
-        unique_together = ('last_name', 'first_name','college')
+        unique_together = ('last_name', 'first_name','college', 'student_id')
+
 
 
     @property
@@ -32,7 +40,7 @@ class Roomate(models.Model):
 
 class Comment(models.Model):
     roomate = models.ForeignKey(Roomate)
-    username = models.CharField(max_length=30)
+    date = models.DateField(default=datetime.now)
     ONE = 1.0
     TWO = 2.0
     THREE = 3.0
@@ -47,11 +55,13 @@ class Comment(models.Model):
     )
     Overall_Rating = models.DecimalField(choices=RATING_CHOICES, max_digits=2, decimal_places=1)
     Description = models.TextField(max_length= 500, blank= False, null= False)
-    class Meta:
-        unique_together = ('username', 'roomate')
-    def __str__(self):
-        return self.username
 
+
+    def __str__(self):
+        return self.comment_name
+    @property
+    def comment_name(self):
+        return 'Comment: ' + str(self.pk) + ', with Rating: ' + str(self.Overall_Rating) + ' , On: ' + str(self.date)
 
 class CollegeSuggestion(models.Model):
     college = models.CharField(max_length = 50, validators=[RegexValidator(regex='^[A-Za-z\s]*$',
