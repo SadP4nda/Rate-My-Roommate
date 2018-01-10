@@ -10,6 +10,8 @@
                     {% if error_message %}
                      <p><strong>{{error_message}}</strong></p>
                     {% endif %}
+                    <ul class="list-group" >
+                    <li class="list-group-item">
                     <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         {% include 'roomaterating/form-template.html' %}
@@ -20,6 +22,8 @@
                             </div>
                         </div>
                     </form>
+                        </li>
+                        </ul>
                 </div>
             </div>
         </div>

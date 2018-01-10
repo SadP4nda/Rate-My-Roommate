@@ -31,7 +31,10 @@
 {% endif %}
 </ul>
 <h2 class = 'lobster' id = "add-comment">Add a Comment</h2>
+<ul class="list-group" >
+    <li class="list-group-item" >
 <div class="form" id = "add-comment-form">
+
 <form class="form-horizontal" action="{% url 'roomaterating:viewroommate' roomate.pk %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {% for field in form %}
@@ -60,4 +63,6 @@
 </form>
     {% recaptcha_explicit_init %}
 </div>
+</li>
+</ul>
 {% endblock %}
