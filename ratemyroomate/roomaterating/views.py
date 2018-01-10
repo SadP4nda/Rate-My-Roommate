@@ -127,7 +127,7 @@ class RoomateCreateView(FormView):
                 college= form.cleaned_data['college'],
                 first_name = form.cleaned_data['first_name'].upper(),
                 last_name = form.cleaned_data['last_name'].upper(),
-                student_id = form.cleaned_data['student_id'],   
+                student_id = form.cleaned_data['student_id'],
                 )
         except IntegrityError:
             form.add_error(None, "This Roommate already exists")
