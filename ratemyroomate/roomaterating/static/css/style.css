@@ -210,6 +210,10 @@ justify-content:center;
 }
 #allcomments{
 text-align:center; margin-top:2.5%;}
+.form-list-group{
+    width:400%;
+    margin-left:-150%;
+}
 @media only screen and (max-width: 667px)
 {
     .form-fields{

@@ -2,12 +2,16 @@
 {% block Colleges %} active {% endblock %}
 {% block body %}
 <h1 class = "collegetitle">All Colleges</h1>
-    <ul class="list-group">
+    {% if colleges %}
+        <ul class="list-group">
     {% for college in colleges %}
-        <li class="list-group-item"><a href="{% url 'roomaterating:colleges-roomates'  college.pk %}">{{college}}</a></li>
+            <li class="list-group-item"><a href="{% url 'roomaterating:colleges-roomates'  college.pk %}">{{college}}</a></li>
     {% endfor %}
-    </ul>
-
+        </ul>
+    {% else %}
+        <ul class="list-group">
+            <li class="list-group-item">Sorry, There are no colleges.<a href="{% url 'roomaterating:add-college' %}"> Click Here to add suggest a College to add.</a></li>
+    {% endif %}
 {% if is_paginated %}
 
   <ul class="pagination">
