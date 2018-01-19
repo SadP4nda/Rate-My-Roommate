@@ -9,7 +9,7 @@ from django.db.models import Q
 from itertools import chain
 from django.http import HttpResponseRedirect
 from django.db import IntegrityError
-
+from django.shortcuts import render
 # Create your views here.
 
 def get_avg(lst):
@@ -28,6 +28,7 @@ class CollegeView(ListView):
     context_object_name = "colleges"
     paginate_by = 5
     def get_queryset(self):
+
         return College.objects.all().order_by('campus')
 
 
@@ -49,6 +50,7 @@ class CollegeRoomatesView(ListView):
     def get_context_data(self, **kwargs):
         context = super(CollegeRoomatesView, self).get_context_data(**kwargs)
         context['campus'] = College.objects.get(pk=self.kwargs['pk'])
+
         return context
 
 
@@ -60,6 +62,7 @@ class RoommateDetailView(DetailView):
     def get_context_data(self, **kwargs):
 
         context = super(RoommateDetailView,self).get_context_data(**kwargs)
+
         roommatecomments = self.get_object().comment_set.all()
         context['OverallAvg'] = "No rating Available"
         if len(roommatecomments) > 0:
@@ -80,12 +83,9 @@ class AddComment(FormView, SingleObjectMixin):
     form_class = CommentForm
     template_name = "roomaterating/RoommateDetailView.html"
     model = Roomate
-    def get_context_data(self, **kwargs):
 
-        context = super(AddComment,self).get_context_data(**kwargs)
 
-        return context
-    def form_valid(self, form):
+    def form_valid(self, form, request):
 
         try:
             Comment.objects.create(
@@ -94,16 +94,18 @@ class AddComment(FormView, SingleObjectMixin):
                 Description = form.cleaned_data['Description']
                 )
         except IntegrityError:
-            return HttpResponseRedirect(reverse('roomaterating:viewroommate',kwargs={'pk': self.kwargs['pk']}))
+            return HttpResponseRedirect(reverse('roomaterating:viewroommate', kwargs={'pk': self.kwargs['pk']}))
 
         return super(AddComment, self).form_valid(form)
 
     def form_invalid(self, form):
 
-        return HttpResponseRedirect(reverse('roomaterating:viewroommate', kwargs={'pk': self.kwargs['pk']}))
+        return render(self.request, "roomaterating/RoommateDetailView.html", {'object': Roomate.objects.get(pk=self.kwargs['pk']),
+                                                                         'roomate': Roomate.objects.get(pk=self.kwargs['pk']),
+                                                                         'form': form})
     def get_success_url(self):
-
         return reverse('roomaterating:viewroommate', kwargs={'pk': self.kwargs['pk']})
+
 
 
 class RoommateDetail(TemplateView):
@@ -122,6 +124,7 @@ class RoomateCreateView(FormView):
     template_name = 'roomaterating/AddRoommate.html'
     form_class = RoommateCreateForm
     def form_valid(self, form):
+
         try:
             Roomate.objects.create(
                 college= form.cleaned_data['college'],
