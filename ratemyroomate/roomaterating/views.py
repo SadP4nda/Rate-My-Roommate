@@ -85,7 +85,7 @@ class AddComment(FormView, SingleObjectMixin):
     model = Roomate
 
 
-    def form_valid(self, form, request):
+    def form_valid(self, form):
 
         try:
             Comment.objects.create(
@@ -94,19 +94,31 @@ class AddComment(FormView, SingleObjectMixin):
                 Description = form.cleaned_data['Description']
                 )
         except IntegrityError:
-            return HttpResponseRedirect(reverse('roomaterating:viewroommate', kwargs={'pk': self.kwargs['pk']}))
-
+            context = self.context
+            context['form'] = form
+            return render(self.request, "roomaterating/RoommateDetailView.html", context)
         return super(AddComment, self).form_valid(form)
 
     def form_invalid(self, form):
-
-        return render(self.request, "roomaterating/RoommateDetailView.html", {'object': Roomate.objects.get(pk=self.kwargs['pk']),
-                                                                         'roomate': Roomate.objects.get(pk=self.kwargs['pk']),
-                                                                         'form': form})
+        self.request.method= "GET"
+        context = self.context
+        context['form'] = form
+        return render(self.request, "roomaterating/RoommateDetailView.html", context)
     def get_success_url(self):
         return reverse('roomaterating:viewroommate', kwargs={'pk': self.kwargs['pk']})
-
-
+    @property
+    def context(self):
+        context = {'object': Roomate.objects.get(pk=self.kwargs['pk']),'roomate': Roomate.objects.get(pk=self.kwargs['pk'])}
+        roommatecomments = Roomate.objects.get(pk=self.kwargs['pk']).comment_set.all()
+        context['OverallAvg'] = "No rating Available"
+        if len(roommatecomments) > 0:
+            rating_lst = []
+            for comment in roommatecomments:
+                rating_lst.append(comment.Overall_Rating)
+            OverallAvg = round(Decimal(get_avg(rating_lst)), 1)
+            context['OverallAvg'] = OverallAvg
+            context['comments'] = roommatecomments
+        return context
 
 class RoommateDetail(TemplateView):
 
